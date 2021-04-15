@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "node scripts/ros_listener.js",
-    "server": "nodemon scripts/index.js"
+    "start": "nodemon scripts/index.js"
   },
   "keywords": [
     "robot",
@@ -13,6 +12,7 @@
   "author": "Victor Hugo Belinello",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.21.1",
     "express": "^4.17.1",
     "rosnodejs": "^3.0.2"
   },
