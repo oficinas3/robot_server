@@ -22,10 +22,10 @@ The messages to be exchanged with the server running on the cloud are:
     * The cloud server sends a PUT request to the /goto route on the robot
     * The message is an object with "x" and "y" field, with the x and y coordinates, of the point the robot needs to go.
 4. Send a message when the robot is lost
-    * The robot server sends a PUT request to the /lost route on the cloud
+    * The robot server sends a PUT request to the /robot/lost route on the cloud
     * The message is the string "LOST"
 5. Send a message with the map file
-    * The robot server sends a PUT request to the /map route on the cloud
+    * The robot server sends a PUT request to the /save/map route on the cloud
     * The message is the .pgm image of the map encoded using base64
 
 The robot always return the string "OK" if request was successful or "FAILED" if not.
