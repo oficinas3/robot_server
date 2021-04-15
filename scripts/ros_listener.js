@@ -3,7 +3,7 @@ const rosnodejs = require('rosnodejs');
 // Requires the std_msgs message package
 const stdMsgs = rosnodejs.require('std_msgs').msg;
 const { spawn } = require('child_process');
-const { sendMap } = require('./send.js');
+const { sendMap } = require('./utils.js');
 
 function listener() {
     // Register node with ROS master

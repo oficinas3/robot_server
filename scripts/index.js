@@ -1,6 +1,7 @@
 const express = require('express');
 const { spawn } = require('child_process');
 const rosListener = require('./ros_listener.js');
+const { startROS } = require('./utils.js');
 // Constants
 const PORT = 7777;
 const HOST = '0.0.0.0';
@@ -12,6 +13,7 @@ app.use(express.json());
 app.put('/start', (req, res) => {
     const msg = req.body.message;
     if (msg === 'START RENT') {
+        startROS();
         res.send('OK');
     } else {
         res.send('FAILED');
