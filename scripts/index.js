@@ -1,7 +1,7 @@
 const express = require('express');
 const { spawn } = require('child_process');
 const rosListener = require('./ros_listener.js');
-const { startROS } = require('./utils.js');
+const { startROS,getRent } = require('./utils.js');
 // Constants
 const PORT = 7777;
 const HOST = '0.0.0.0';
@@ -67,3 +67,20 @@ console.log(`Running on http://${HOST}:${PORT}`);
 
 rosListener.listener();
 console.log('Ros listener running');
+
+var isRented = false;
+makeRequest();
+f = setInterval(makeRequest, 1000);
+async function makeRequest(){
+    var data = await getRent();
+    if(data.state=="RENTED"&&!isRented){
+        startROS();
+        //DO a post OK on cloud?
+        console.log("Starting the robot");
+        isRented = true;
+    }
+    else if(data.state=="STANDY_BY"&&isRented){
+        console.log("Finishing the robot rent");
+        isRented = false;
+    }
+}

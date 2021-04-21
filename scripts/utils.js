@@ -10,7 +10,14 @@ function startROS() {
     const ros = spawn('roslaunch', ['cart_robot', 'my_world.launch']);
 }
 
+async function getRent() {
+    let res = await axios.get('https://followyolo.herokuapp.com/robot/1');
+    let data = res.data;
+    return data;
+}
+
 module.exports = {
+    getRent,
     sendMap,
     startROS,
 };
