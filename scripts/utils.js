@@ -1,5 +1,5 @@
 const axios = require('axios').default;
-const { spawn } = require('child_process');
+const { spawn, exec } = require('child_process');
 
 function sendMap(map) {
     console.log(`Sending ${map}`);
@@ -7,12 +7,24 @@ function sendMap(map) {
 }
 
 function startROS() {
-    const ros = spawn('roslaunch', ['cart_robot', 'my_world.launch']);
+    const ros = spawn('roslaunch', ['cart_robot', 'global.launch']);
+    ros.stdout.on('data', (data) => {
+        console.log(`${data}`);
+    });
+    ros.stderr.on('data', (data) => {
+        console.log(`${data}`);
+    });
+}
+
+function endROS() {
+    exec('pkill rosmaster', (error, stdout, stderr) => {
+        console.log(stdout);
+    });
 }
 
 async function getRent() {
-    let res = await axios.get('https://followyolo.herokuapp.com/robot/1');
-    let data = res.data;
+    const res = await axios.get('https://followyolo.herokuapp.com/robot/1');
+    const { data } = res;
     return data;
 }
 
@@ -20,4 +32,5 @@ module.exports = {
     getRent,
     sendMap,
     startROS,
+    endROS,
 };
