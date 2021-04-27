@@ -28,7 +28,19 @@ async function getRent() {
     return data;
 }
 
+async function getXY() {
+    let res = await axios.get('https://followyolo.herokuapp.com/robot/1/goto');
+    let data = res.data;
+    return data;
+}
+async function deleteXY() {
+    let res = await axios.delete('https://followyolo.herokuapp.com/robot/1/goto');
+    let data = res.data;
+    return data;
+}
 module.exports = {
+    deleteXY,
+    getXY,
     getRent,
     sendMap,
     startROS,

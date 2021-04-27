@@ -23,6 +23,17 @@ function listener() {
                     });
                     // sendMap(data.data);
                 });
+            const sub2 = rosNode.subscribe('/lost', stdMsgs.String,
+                (data) => { // define callback execution
+                    //data = {"islost": 1}
+                    rosnodejs.log.info(data.data);
+                    sendLost(data.data);
+            });
+            const pub1 = rosNode.publish('/goto', stdMsgs.String,
+                (data) => { 
+                    //need to publish on goto
+                    rosnodejs.log.info(data.data);
+            });
         });
 }
 

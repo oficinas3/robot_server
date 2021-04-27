@@ -1,7 +1,7 @@
 const express = require('express');
 const { spawn } = require('child_process');
 const rosListener = require('./ros_listener.js');
-const { startROS, getRent, endROS } = require('./utils.js');
+const { startROS, getRent, endROS,getXY ,deleteXY } = require('./utils.js');
 // Constants
 const PORT = 7777;
 const HOST = '0.0.0.0';
@@ -80,6 +80,16 @@ async function makeRequest() {
         endROS();
         console.log('Finishing the robot rent');
         isRented = false;
+    }
+    if(data.islost==1){
+        console.log("Robot is Lost");
+        var goto = await getXY();
+        if(goto){
+            //delete goto cloud
+            var delet = await deleteXY();
+            //publish to go to a point on map
+            console.log("Going to X: " +goto.point_x + " Y : "+goto.point_y);
+        }
     }
 }
 makeRequest();
