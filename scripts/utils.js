@@ -1,8 +1,20 @@
 const axios = require('axios').default;
 const { spawn, exec } = require('child_process');
+const rosnodejs = require('rosnodejs');
+
+const geoMsgs = rosnodejs.require('geometry_msgs').msg;
+
+function pubGoTo(publisher, x, y) {
+    const msg = new geoMsgs.Point();
+    msg.x = x;
+    msg.y = y;
+    msg.z = 1;
+    console.log(`Publishing ${x} ${y}`);
+    publisher.publish(msg);
+}
 
 function sendMap(map) {
-    console.log(`Sending ${map}`);
+    console.log(`Sending map ${map}`);
     axios.post('https://followyolo.herokuapp.com/save/map', { map });
 }
 
@@ -29,13 +41,13 @@ async function getRent() {
 }
 
 async function getXY() {
-    let res = await axios.get('https://followyolo.herokuapp.com/robot/1/goto');
-    let data = res.data;
+    const res = await axios.get('https://followyolo.herokuapp.com/robot/1/goto');
+    const { data } = res;
     return data;
 }
 async function deleteXY() {
-    let res = await axios.delete('https://followyolo.herokuapp.com/robot/1/goto');
-    let data = res.data;
+    const res = await axios.delete('https://followyolo.herokuapp.com/robot/1/goto');
+    const { data } = res;
     return data;
 }
 module.exports = {
@@ -45,4 +57,5 @@ module.exports = {
     sendMap,
     startROS,
     endROS,
+    pubGoTo,
 };
