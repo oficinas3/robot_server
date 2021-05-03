@@ -21,15 +21,25 @@ function mapCallback(data) {
 
 function lostCallback(data) {
     console.log('Recebido mensagem de robo perdido');
-    axios.post('https://followyolo.herokuapp.com/robot/1/lost', { islost: 1 });
+    const flag = parseInt(data.data);
+    axios.post('https://followyolo.herokuapp.com/robot/1/lost', { islost: flag });
+}
+
+function killCallback(data) {
+    console.log('Recebido mensagem para matar processo do ROS');
+    const kill = spawn('pkill', ['rosmaster']);
+    kill.on('close', (code) => {
+        console.log(`kill process exited with code ${code}`);
+    });
 }
 
 async function node() {
     const rosNode = await rosnodejs.initNode('/web_client_node');
     rosNode.subscribe('/map_ready', stdMsgs.String, mapCallback);
     rosNode.subscribe('/lost', stdMsgs.String, lostCallback);
+    rosNode.subscribe('/killme', stdMsgs.String, killCallback);
 
-    const pub = rosNode.advertise('/govai', geoMsgs.Point);
+    const pub = rosNode.advertise('/govai', geoMsgs.Pose);
     return pub;
 }
 

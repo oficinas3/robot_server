@@ -4,12 +4,12 @@ const rosnodejs = require('rosnodejs');
 
 const geoMsgs = rosnodejs.require('geometry_msgs').msg;
 
-function pubGoTo(publisher, x, y) {
-    const msg = new geoMsgs.Point();
-    msg.x = x;
-    msg.y = y;
-    msg.z = 1;
-    console.log(`Publishing ${x} ${y}`);
+function pubGoTo(publisher, x, y, z) {
+    const msg = new geoMsgs.Pose();
+    msg.position.x = x;
+    msg.position.y = y;
+    msg.position.z = z;
+    console.log(`Publishing ${x} ${y} to goto`);
     publisher.publish(msg);
 }
 
@@ -19,18 +19,17 @@ function sendMap(map) {
 }
 
 function startROS() {
-    const ros = spawn('roslaunch', ['cart_robot', 'global.launch']);
-    ros.stdout.on('data', (data) => {
-        console.log(`${data}`);
+    const roslaunch = spawn('roslaunch', ['followyollo_simulation', 'global.launch']);
+    roslaunch.stdout.on('data', (data) => {
+        console.log(`roslaunch data: ${data}`);
     });
-    ros.stderr.on('data', (data) => {
-        console.log(`${data}`);
-    });
+    console.log('roslaunch iniciado');
 }
 
 function endROS() {
-    exec('pkill rosmaster', (error, stdout, stderr) => {
-        console.log(stdout);
+    const kill = spawn('pkill', ['rosmaster']);
+    kill.on('close', (code) => {
+        console.log(`kill process exited with code ${code}`);
     });
 }
 

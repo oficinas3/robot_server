@@ -19,13 +19,13 @@ async function makeRequest() {
         console.log('Starting the robot');
         isRented = true;
     } else if (data.state === 'STANDY_BY' && isRented) {
-        endROS();
-        console.log('Finishing the robot rent');
+        pubGoTo(publisher, 10, -6, -1);
+        console.log('Sending robot to base');
         isRented = false;
     }
 
     if (data.islost === 1) {
-        console.log('Robot is Lost');
+        console.log('Robot is lost');
         const goto = await getXY();
         let publishGoTo = true;
         if (goto) {
@@ -34,7 +34,7 @@ async function makeRequest() {
             // publish to go to a point on map
             console.log(`Going to X: ${goto.point_x} Y : ${goto.point_y}`);
             if (publishGoTo) {
-                pubGoTo(publisher, -5, 1);
+                pubGoTo(publisher, goto.point_x, goto.point_y, 1);
                 publishGoTo = false;
             }
         }
